@@ -5,9 +5,12 @@ class foreman::database::mysql {
     default => $foreman::db_database,
   }
 
-  include mysql, mysql::server, mysql::server::account_security
-  mysql::db { $dbname:
-    user     => $foreman::db_username,
-    password => $foreman::db_password,
+  include mysql
+  if ( $db_host == 'UNSET' ) {
+    include mysql::server, mysql::server::account_security
+    mysql::db { $dbname:
+      user     => $foreman::db_username,
+      password => $foreman::db_password,
+    }
   }
 }
